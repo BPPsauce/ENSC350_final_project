@@ -1,7 +1,6 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 Use ieee.numeric_std.all;
-Use STD.TEXTIO.all;
 use IEEE.MATH_REAL.ALL;
 
 Entity SRL64 is
@@ -35,26 +34,26 @@ begin
 	shift <= std_logic_vector(ShiftCount);
 	
 	mux1 : mux_4to1 generic map (64)
-											port map (A => input((N-1)-48 downto 0) & zeroVec(47 downto 0), 
-																	 B => input((N-1)-32 downto 0) & zeroVec(31 downto 0), 
-																	 C=> input((N-1)-16 downto 0) & zeroVec(15 downto 0), 
+											port map (A => zeroVec(47 downto 0) & input((N-1) downto 48), 
+																	 B => zeroVec(31 downto 0) & input((N-1) downto 32), 
+																	 C=> zeroVec(15 downto 0) & input((N-1) downto 16), 
 																	 D=> input((N-1) downto 0),
-																	 S0 => shift(4), S1=> shift(5), 
+																	 S0 => shift(5), S1=> shift(4), 
 																	 Z => mux1to2);
 	
 	mux2 : mux_4to1 generic map (64)
-											port map (A =>  mux1to2((N-1)-12 downto 0) & zeroVec(11 downto 0), 
-																	 B =>  mux1to2((N-1)-8 downto 0) & zeroVec(7 downto 0), 
-																	 C=>  mux1to2((N-1)-4 downto 0) & zeroVec(3 downto 0), 
+											port map (A =>  zeroVec(11 downto 0) & mux1to2((N-1) downto 12), 
+																	 B =>  zeroVec(7 downto 0) & mux1to2((N-1) downto 8), 
+																	 C=>  zeroVec(3 downto 0) & mux1to2((N-1) downto 4), 
 																	 D=> mux1to2,
-																	 S0 => shift(2), S1=> shift(3), 
+																	 S0 => shift(3), S1=> shift(2), 
 																	 Z => mux2to3);
 																	 
 	mux3 : mux_4to1 generic map (64)
-											port map (A =>  mux2to3((N-1)-3 downto 0) & zeroVec(2 downto 0), 
-																	 B =>  mux2to3((N-1)-2 downto 0) & zeroVec(1 downto 0), 
-																	 C=> mux2to3((N-1)-1 downto 0) & zeroVec(0 downto 0), 
+											port map (A => zeroVec(2 downto 0) & mux2to3((N-1) downto 3), 
+																	 B => zeroVec(1 downto 0) & mux2to3((N-1) downto 2), 
+																	 C=> zeroVec(0 downto 0) & mux2to3((N-1) downto 1), 
 																	 D=>mux2to3,
-																	 S0 => shift(0), S1=> shift(1), 
+																	 S0 => shift(1), S1=> shift(0), 
 																	 Z => result);	
 end bhv; 

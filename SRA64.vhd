@@ -1,7 +1,6 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 Use ieee.numeric_std.all;
-Use STD.TEXTIO.all;
 use IEEE.MATH_REAL.ALL;
 
 Entity SRA64 is
@@ -26,13 +25,11 @@ end component;
 	signal mux2to3 : std_logic_vector(N-1 downto 0);
 	signal result : std_logic_vector(N-1 downto 0);
 	signal shift : std_logic_vector ( integer(ceil(log2(real(N))))-1 downto 0);
-	signal zeroVec : std_logic_vector (N-1 downto 0);
 	
-	signal SRA48 : signed(N-1 downto 0);
+	--signal SRA48 : signed(N-1 downto 0);
 	
 begin
 	Y <= result;
-	zeroVec <= (others => '0');
 	input <= X;
 	shift <= std_logic_vector(ShiftCount);
 	
@@ -41,7 +38,7 @@ begin
 																	 B =>  std_logic_vector(shift_right(signed(input), 32)), 
 																	 C=>  std_logic_vector(shift_right(signed(input), 16)) , 
 																	 D=>  std_logic_vector(shift_right(signed(input), 0)),
-																	 S0 => shift(4), S1=> shift(5), 
+																	 S0 => shift(5), S1=> shift(4), 
 																	 Z => mux1to2);
 	
 	mux2 : mux_4to1 generic map (64)
@@ -49,7 +46,7 @@ begin
 																	 B =>  std_logic_vector(shift_right(signed(mux1to2), 8)), 
 																	 C=>  std_logic_vector(shift_right(signed(mux1to2), 4)), 
 																	 D=> std_logic_vector(shift_right(signed(mux1to2), 0)),
-																	 S0 => shift(2), S1=> shift(3), 
+																	 S0 => shift(3), S1=> shift(2), 
 																	 Z => mux2to3);
 																	 
 	mux3 : mux_4to1 generic map (64)
@@ -57,6 +54,6 @@ begin
 																	 B => std_logic_vector(shift_right(signed(mux2to3), 2)), 
 																	 C=> std_logic_vector(shift_right(signed(mux2to3), 1)), 
 																	 D=> std_logic_vector(shift_right(signed(mux2to3), 0)),
-																	 S0 => shift(0), S1=> shift(1), 
+																	 S0 => shift(1), S1=> shift(0), 
 																	 Z => result);	
 end bhv; 
