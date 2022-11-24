@@ -1,0 +1,121 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+Use ieee.numeric_std.all;
+use IEEE.MATH_REAL.ALL;
+
+Entity tb_ShiftUnit is
+	Generic ( N : natural := 64 );
+	Port ( A, B, C : in std_logic_vector( N-1 downto 0 );
+					Y : out std_logic_vector( N-1 downto 0 );
+					ShiftFN : in std_logic_vector( 1 downto 0 );
+					ExtWord : in std_logic );
+End Entity tb_ShiftUnit;
+
+Architecture test of tb_ShiftUnit is
+	Component 	ShiftUnit is
+	Generic ( N : natural := 64 );
+	Port ( A, B, C : in std_logic_vector( N-1 downto 0 );
+					Y : out std_logic_vector( N-1 downto 0 );
+					ShiftFN : in std_logic_vector( 1 downto 0 );
+					ExtWord : in std_logic );
+End Component;
+
+--signal count : unsigned (integer(ceil(log2(real(N))))-1 downto 0 );
+signal inputA : std_logic_vector(N-1 downto 0);
+signal inputB : std_logic_vector(N-1 downto 0);
+signal inputC : std_logic_vector(N-1 downto 0);
+signal ShiftFNSig : std_logic_vector (1 downto 0);
+signal extWordSig : std_logic;
+signal output : std_logic_vector(N-1 downto 0);
+
+begin 
+DUT: ShiftUnit
+port map ( A => inputA, B => inputB, C => inputC, 
+			  Y => output,
+			  ShiftFN => ShiftFNSig,
+			  ExtWord => extWordSig);
+
+process is 
+begin 
+--shiftFN 00
+
+inputA <= "1000000000000000000000000000010000000000000000000000000000000000";
+inputB <= "0100000000000000000000000000001000000000000000000000000000000001";
+inputC <= "0010000000000000000000000000000100000000000000000000000000000000";
+
+ShiftFNSig <= "00";
+extWordSig <= '0';
+wait for 200 ns;
+
+inputA <= "1000000000000000000000000000010000000000000000000000000000000000";
+inputB <= "0100000000000000000000000000001000000000000000000000000000000001";
+inputC <= "0010000000000000000000000000000100000000000000000000000000000000";
+
+ShiftFNSig <= "00";
+extWordSig <= '1';
+wait for 200 ns;
+-- end shiftnFN 00
+
+
+--shiftFN 01
+
+inputA <= "1000000000000000000000000000010000000000000000000000000000000000";
+inputB <= "0100000000000000000000000000001000000000000000000000000000000001";
+inputC <= "0010000000000000000000000000000100000000000000000000000000000000";
+
+ShiftFNSig <= "01";
+extWordSig <= '0';
+wait for 200 ns;
+
+inputA <= "1000000000000000000000000000010000000000000000000000000000000000";
+inputB <= "0100000000000000000000000000001000000000000000000000000000000001";
+inputC <= "0010000000000000000000000000000100000000000000000000000000000000";
+
+ShiftFNSig <= "01";
+extWordSig <= '1';
+wait for 200 ns;
+-- end shiftnFN 01
+
+--shiftFN 10
+
+inputA <= "1000000000000000000000000000010000000000000000000000000000000000";
+inputB <= "0100000000000000000000000000001000000000000000000000000000000001";
+inputC <= "0010000000000000000000000000000100000000000000000000000000000000";
+
+ShiftFNSig <= "10";
+extWordSig <= '0';
+wait for 200 ns;
+
+inputA <= "1000000000000000000000000000010000000000000000000000000000000000";
+inputB <= "0100000000000000000000000000001000000000000000000000000000000001";
+inputC <= "0010000000000000000000000000000100000000000000000000000000000000";
+
+ShiftFNSig <= "10";
+extWordSig <= '1';
+wait for 200 ns;
+-- end shiftnFN 10
+
+
+--shiftFN 11
+
+inputA <= "1000000000000000000000000000010000000000000000000000000000000000";
+inputB <= "0100000000000000000000000000001000000000000000000000000000000001";
+inputC <= "0010000000000000000000000000000100000000000000000000000000000000";
+
+ShiftFNSig <= "11";
+extWordSig <= '0';
+wait for 200 ns;
+
+inputA <= "1000000000000000000000000000010000000000000000000000000000000000";
+inputB <= "0100000000000000000000000000001000000000000000000000000000000001";
+inputC <= "0010000000000000000000000000000100000000000000000000000000000000";
+
+ShiftFNSig <= "11";
+extWordSig <= '1';
+wait for 200 ns;
+-- end shiftnFN 11
+wait;
+
+end process;
+
+end test;
