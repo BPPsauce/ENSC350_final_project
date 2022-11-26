@@ -36,7 +36,7 @@ architecture bhv of ShiftUnit is
 --component ends	
 
 	signal result : std_logic_vector (N-1 downto 0);
-	signal signExtend : signed (N-1 downto 0); --32 bit sign extened 
+	--signal signExtend : signed (N-1 downto 0); --32 bit sign extened 
 	signal ShiftCountSig : unsigned (integer(ceil(log2(real(N))))-1 downto 0 );
 	signal inputToBS: std_logic_vector(N -1 downto 0);
 	signal isSwapWord : std_logic;
@@ -53,7 +53,7 @@ architecture bhv of ShiftUnit is
 	 ShiftCountSig <= unsigned(B(5 downto 0)) when '0',
 												 unsigned ('0' & B(4 downto 0)) when '1',
 												unsigned(B(5 downto 0)) when others;
-	
+
 	--select for input A
 	isSwapWord <= ShiftFN(1) AND ExtWord;
 	with isSwapWord select
@@ -76,7 +76,7 @@ architecture bhv of ShiftUnit is
 	-- end of mapping for the barrel shifters
 	
 
-	process (ShiftFN) is 
+	process (ShiftFN, ExtWord) is 
 	begin 
 	if (shiftFN(0) = '1') then 
 	CorSLL <= SLLout;
@@ -87,8 +87,8 @@ architecture bhv of ShiftUnit is
 	end if;
 	
 	if (ExtWord = '1') then 
-	CorSLL <= std_logic_vector(resize(signed(CorSLL(N-33 downto 0)), signExtend'length));
-	SRLorSRA <= std_logic_vector(resize(signed(SRLorSRA (N-1 downto 32)), signExtend'length));
+	CorSLL <= std_logic_vector(resize(signed(CorSLL(N-33 downto 0)), CorSLL'length));
+	SRLorSRA <= std_logic_vector(resize(signed(SRLorSRA (N-1 downto 32)), SRLorSRA'length));
 	end if;
 	end process;
 	
