@@ -6,10 +6,10 @@ use IEEE.numeric_std.all;
 Entity ArithUnit is
 	Generic ( N : natural := 64 );
 	Port ( A, B : in std_logic_vector( N-1 downto 0 );
-			AddY, Y : out std_logic_vector( N-1 downto 0 );
+			AddY : out std_logic_vector( N-1 downto 0 );
 			
 	-- Control signals
-	AddnSub, ExtWord : in std_logic := '0';
+	AddnSub : in std_logic := '0';
 	
 	-- Status signals
 	Cout, Ovfl, Zero, AltB, AltBu : out std_logic );
@@ -54,12 +54,12 @@ begin
 	AddY <= Y_AdderOut;
 	
 	--get Sign extended version of Y
-	Y_SgnExt(63 downto 32) <= (Others => Y_AdderOut(63));
-	Y_SgnExt(31 downto 0) <= Y_AdderOut(31 downto 0);
+	-- Y_SgnExt(63 downto 32) <= (Others => Y_AdderOut(63));
+	-- Y_SgnExt(31 downto 0) <= Y_AdderOut(31 downto 0);
 	
-	With ExtWord Select
-		Y <= Y_SgnExt when '1',
-			  AddY when others;
+	--With ExtWord Select
+	--	Y <= Y_SgnExt when '1',
+	--		  AddY when others;
 		
 	-- Altb
 	with Cout Select
