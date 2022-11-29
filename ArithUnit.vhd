@@ -38,37 +38,32 @@ begin
 	
 
 	B_Inverted <= NOT B;
-
+	
+	--Use AddnSub to determine if we want to invert B or not
 	With AddnSub Select
 		B_AdderInput <= B_Inverted when '1',
-				B when others;
+							 B when others;
 	
 	u1: Adder port map  (A => A, B => B_AdderInput, Y => Y_AdderOut, Cin => AddnSub, Cout => Cout, Ovfl => Ovfl);
 	
 	--Create Zero flag
 	With Y_AdderOut Select
 		Zero <= '1' when "0000000000000000000000000000000000000000000000000000000000000000", -- Y_Adder out is all zeroes
-			'0' when others;
+				  '0' when others;
 	
 	-- AddY
 	AddY <= Y_AdderOut;
-	
-	--get Sign extended version of Y
-	-- Y_SgnExt(63 downto 32) <= (Others => Y_AdderOut(63));
-	-- Y_SgnExt(31 downto 0) <= Y_AdderOut(31 downto 0);
-	
-	--With ExtWord Select
-	--	Y <= Y_SgnExt when '1',
-	--		  AddY when others;
 		
-	-- Altb
+	-- Altb and AltBu
 	Process(A,B) is
 	begin
+		--compare signed values A and B
 		if signed(A) < signed(B) then
 			AltB <= '1';
 		else
 			AltB <= '0';
 		end if;
+		--compare unsigned values A and B
 		if unsigned(A) < unsigned(B) then
 			AltBu <= '1';
 		else
@@ -76,13 +71,4 @@ begin
 		end if;
 	end Process;
 	
-	
-	--with Cout Select
-	---	AltBu <= '0' when '1',
-	--			   '1' when others;
-	--				
-	--what to do with overflow?
-	--with Cout Select
-	--	AltB <= '0' when '1',
-	--			  '1' when others;
 end Architecture;
