@@ -62,12 +62,27 @@ begin
 	--		  AddY when others;
 		
 	-- Altb
-	with Cout Select
-		AltBu <= '0' when '1',
-				   '1' when others;
-					
+	Process(A,B) is
+	begin
+		if signed(A) < signed(B) then
+			AltB <= '1';
+		else
+			AltB <= '0';
+		end if;
+		if unsigned(A) < unsigned(B) then
+			AltBu <= '1';
+		else
+			AltBu <= '0';
+		end if;
+	end Process;
+	
+	
+	--with Cout Select
+	---	AltBu <= '0' when '1',
+	--			   '1' when others;
+	--				
 	--what to do with overflow?
-	with Cout Select
-		AltB <= '0' when '1',
-				  '1' when others;
+	--with Cout Select
+	--	AltB <= '0' when '1',
+	--			  '1' when others;
 end Architecture;
