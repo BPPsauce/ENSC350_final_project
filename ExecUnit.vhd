@@ -49,7 +49,7 @@ Signal ShiftUnit_Out : std_logic_vector(N-1 downto 0);
 Signal AltB_Carrier : std_logic_vector(N-1 downto 0);
 Signal resultY : std_logic_vector (N-1 downto 0);
 begin
-	
+	AltB_Carrier <= (others => '0');
 	u1: ArithUnit Port Map (A => A, B => B, AddY => ArithUnit_out, AddnSub => AddnSub, Zero => Zero, AltB => AltB, AltBu => AltBu);
 	u2: LogicUnit Port Map (A => A, B => B, Y => LogicUnit_Out, LogicFN => LogicFN);
 	u3: ShiftUnit Port Map (A => A, B => B, C => ArithUnit_Out, Y => ShiftUnit_Out, ShiftFN => ShiftFN, ExtWord => ExtWord);
@@ -58,7 +58,7 @@ begin
 		resultY <= ShiftUnit_Out when "00",
 			  LogicUnit_Out when "01",
 			  AltB_Carrier(N-1 downto 1) & AltB when "10",
-			  AltB_Carrier(N-1 downto 1) & AltB when "11",
+			  AltB_Carrier(N-1 downto 1) & AltBu when "11",
 			  ShiftUnit_Out when others;
 	Y <= resultY;
 end Architecture;
