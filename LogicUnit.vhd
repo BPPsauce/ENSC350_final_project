@@ -9,18 +9,19 @@ LogicFN : in std_logic_vector( 1 downto 0 ) );
 End Entity LogicUnit;
 
 architecture Behavior of LogicUnit is
-
+--Create internal signal
 signal ad : std_logic_vector (N-1 downto 0);
 signal o : std_logic_vector (N-1 downto 0);
 signal x : std_logic_vector (N-1 downto 0);
 
 
 begin
-
+--The main function of logic unit
 ad <= (A And B);
 o <= (A Or B);
 x <= (A Xor B);
 
+--Select with LogicFn
 with LogicFn select 
     Y <= B when "00",
         x when "01",
